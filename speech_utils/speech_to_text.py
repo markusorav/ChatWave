@@ -1,13 +1,8 @@
 import openai
 import speech_recognition as sr
-import pyttsx3
 import os
 
-openai.api_key = "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"
-
-engine = pyttsx3.init()
-voices = engine.getProperty("voices")
-engine.setProperty("voice", voices[1].id) # 0 for male, 1 for female
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 r = sr.Recognizer()
 mic = sr.Microphone(device_index=0)
@@ -33,13 +28,7 @@ def listen():
         audio = r.listen(source)
         try:
             result = transcribe_speech(audio)
-        except:
-            result = "Sorry, something went wrong!"
-        finally:
             print(result)
             return result
-        
-def say(output):
-    print(output)
-    engine.say(output)
-    engine.runAndWait()
+        except:
+            exit("Sorry, something went wrong!")
